@@ -87,6 +87,12 @@ const StepButton = styled.li`
         transform: scale(1.02);
     }
 `
+const StyledLabel = styled.h2`
+    ${({mobileView}) => {
+        return mobileView ? "font-size: 18px;" : "font-size: 24px;"
+    }}
+`
+
 const ErrorMessageWrapper = styled.div`
     height: 62px;
     display: flex;
@@ -95,7 +101,9 @@ const ErrorMessageWrapper = styled.div`
 `
 
 const ErrorMessage = styled.span`
-    font-size: 16px;
+    ${({mobileView}) => {
+        return mobileView ? "font-size: 12px;" : "font-size: 16px;"
+    }}
     text-align: center;
 `
 const ResetButton = styled.button`
@@ -128,9 +136,12 @@ function TicTacToe() {
     const [table, setTable] = useState(Array(9).fill('none'))
     const [tableHistory, setHistory] = useState({})
     const [lap, setLap] = useState(1)
-    const [winCases, setWinCases] = useState(Array(9).fill(true))
+    const [winCases, setWinCases] = useState(Array(9).fill(true ))
 
-    const isMobileOrTablet = useMediaQuery({ query: '(max-width: 980px)' })
+    const isMobileOrTablet = useMediaQuery({ maxWidth: 980 })
+    const isMobile = useMediaQuery({ maxWidth: 480})
+
+    useEffect(() => console.log("isMobile :", isMobile), [isMobile])
 
     function resetGame() {
         setTable(Array(9).fill('none'))
@@ -238,10 +249,16 @@ function TicTacToe() {
 
     function MessageLabel() {
         if (isGameEnd()) {
-            if (winner === 'p1' || winner === 'p2') { return <h2>🥇 Le {winner === 'p1' ? 'joueur 1' : 'joueur 2'} a gagné ! 🥇</h2> }
-            else if (winner === 'none') { return <h2>Égalité, personne n'a gagné</h2> }
+            if (winner === 'p1' || winner === 'p2') {
+                return <StyledLabel mobileView={isMobile}>🥇 Le {winner === 'p1' ? 'joueur 1' : 'joueur 2'} a gagné ! 🥇</StyledLabel>
+            }
+            else if (winner === 'none') {
+                return <StyledLabel mobileView={isMobile}>Égalité, personne n'a gagné</StyledLabel>
+            }
         }
-        else { return <h2>C'est au tour de {currentPlayer === 'p1' ? 'joueur 1' : 'joueur 2'} !</h2> }
+        else {
+            return <StyledLabel mobileView={isMobile}>C'est au tour de {currentPlayer === 'p1' ? 'joueur 1' : 'joueur 2'} !</StyledLabel>
+        }
     }
 
     return (
@@ -250,7 +267,7 @@ function TicTacToe() {
                 <ResetButton onClick={resetGame}>Reset</ResetButton>
             </WrapperCol>
             <WrapperCol>
-                <MessageLabel />
+                <MessageLabel mobileView={isMobile} />
                 <TicTacGrid mobileOrTabletView={isMobileOrTablet}>
                     <Row>
                         <Column className='case0' grayCase={!winCases[0]} player={table[0]} onClick={game} />
@@ -269,7 +286,7 @@ function TicTacToe() {
                     </Row>
                 </TicTacGrid>
                 <ErrorMessageWrapper>
-                    {placementError && <ErrorMessage>❌ Vous ne pouvez pas vous placer ici ❌</ErrorMessage>}
+                    {placementError && <ErrorMessage mobileView={isMobile}>❌ Vous ne pouvez pas vous placer ici ❌</ErrorMessage>}
                 </ErrorMessageWrapper>
             </WrapperCol>
             <WrapperCol>

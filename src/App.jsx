@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { useMediaQuery } from 'react-responsive'
 import './App.css';
 import TicTacToe from './components/TicTacToe'
 import reactLogo from './assets/react-js-logo.svg'
@@ -6,7 +7,9 @@ import vueLogo from './assets/vue-js-logo.svg'
 
 const Title = styled.h1`
   width: 100%;
-  font-size: 50px;
+  ${({mobileView}) => {
+    return mobileView ? "font-size: 40px;" : "font-size: 50px;"
+  }}
   font-weight: 500;
   text-align: center;
   margin : 40px 0 10px 0;
@@ -41,11 +44,12 @@ const ReactLogoBG = styled.div`
 
 
 function App() {
+  const isMobile = useMediaQuery({ maxWidth: 480})
   return (
     <div>
     <ReactLogoBG />
     <VueLogoBG />
-    <Title>Tic Tac Toe</Title>
+    <Title mobileView={isMobile}>Tic Tac Toe</Title>
     <TicTacToe />
     </div>
   );
