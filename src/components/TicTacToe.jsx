@@ -141,8 +141,6 @@ function TicTacToe() {
     const isMobileOrTablet = useMediaQuery({ maxWidth: 980 })
     const isMobile = useMediaQuery({ maxWidth: 480})
 
-    useEffect(() => console.log("isMobile :", isMobile), [isMobile])
-
     function resetGame() {
         setTable(Array(9).fill('none'))
         setPlacementError(false)
